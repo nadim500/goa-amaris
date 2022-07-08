@@ -1,0 +1,173 @@
+swagger: "2.0"
+info:
+    title: Amaris Service
+    description: HTTP service for amaris test
+    version: ""
+host: localhost:8080
+consumes:
+    - application/json
+    - application/xml
+    - application/gob
+produces:
+    - application/json
+    - application/xml
+    - application/gob
+paths:
+    /friendlychains:
+        post:
+            tags:
+                - amaris
+            summary: FriendlyChains amaris
+            description: Receives two words and returns if these are friendly
+            operationId: amaris#FriendlyChains
+            parameters:
+                - name: FriendlyChainsRequestBody
+                  in: body
+                  description: The friendlychains request
+                  required: true
+                  schema:
+                    $ref: '#/definitions/AmarisFriendlyChainsRequestBody'
+            responses:
+                "200":
+                    description: OK response.
+                    schema:
+                        $ref: '#/definitions/AmarisFriendlyChainsResponseBody'
+            schemes:
+                - http
+    /openapi.json:
+        get:
+            tags:
+                - openapi
+            summary: Download openapi3.json
+            operationId: openapi#/openapi.json
+            responses:
+                "200":
+                    description: File downloaded
+                    schema:
+                        type: file
+            schemes:
+                - http
+    /pokemonname/{id}:
+        get:
+            tags:
+                - amaris
+            summary: PokemonName amaris
+            description: Receives pokemon id and returns its name
+            operationId: amaris#PokemonName
+            parameters:
+                - name: id
+                  in: path
+                  description: Pokemon id
+                  required: true
+                  type: integer
+            responses:
+                "200":
+                    description: OK response.
+                    schema:
+                        $ref: '#/definitions/AmarisPokemonNameResponseBody'
+            schemes:
+                - http
+    /sortnames:
+        post:
+            tags:
+                - amaris
+            summary: SortNames amaris
+            description: 'Receives text string and returns two parameters: an array string and the mount of array'
+            operationId: amaris#SortNames
+            parameters:
+                - name: SortNamesRequestBody
+                  in: body
+                  description: The sortnames request
+                  required: true
+                  schema:
+                    $ref: '#/definitions/AmarisSortNamesRequestBody'
+            responses:
+                "200":
+                    description: OK response.
+                    schema:
+                        $ref: '#/definitions/AmarisSortNamesResponseBody'
+            schemes:
+                - http
+definitions:
+    AmarisFriendlyChainsRequestBody:
+        title: AmarisFriendlyChainsRequestBody
+        type: object
+        properties:
+            a:
+                type: string
+                description: First word.
+                example: to
+            b:
+                type: string
+                description: Second word.
+                example: kyo
+        description: Represents a friendlychains request.
+        example:
+            a: to
+            b: kyo
+        required:
+            - a
+            - b
+    AmarisFriendlyChainsResponseBody:
+        title: 'Mediatype identifier: friendlychainsresponse; view=default'
+        type: object
+        properties:
+            result:
+                type: string
+                description: Friendly Chains
+                example: Las cadenas son amigas
+        description: FriendlyChainsResponseBody result type (default view)
+        example:
+            result: Las cadenas son amigas
+    AmarisPokemonNameResponseBody:
+        title: 'Mediatype identifier: pokemonnameresponse; view=default'
+        type: object
+        properties:
+            name:
+                type: string
+                description: Pokemon Name
+                example: Picachu
+        description: PokemonNameResponseBody result type (default view)
+        example:
+            name: Picachu
+    AmarisSortNamesRequestBody:
+        title: AmarisSortNamesRequestBody
+        type: object
+        properties:
+            text:
+                type: string
+                description: The text string.
+                example: Luis,Camilo,Andres,Laura
+        description: Represents a sortnames request.
+        example:
+            text: Luis,Camilo,Andres,Laura
+        required:
+            - text
+    AmarisSortNamesResponseBody:
+        title: 'Mediatype identifier: sortnamesresponse; view=default'
+        type: object
+        properties:
+            data:
+                type: array
+                items:
+                    type: string
+                    example: Harum enim.
+                description: Names sort by first letter
+                example:
+                    - Andres
+                    - Camilo
+                    - Laura
+                    - Luis
+            quantity:
+                type: integer
+                description: Amount in Array
+                example: 5
+                format: int64
+        description: SortNamesResponseBody result type (default view)
+        example:
+            data:
+                - Andres
+                - Camilo
+                - Laura
+                - Luis
+            quantity: 5
